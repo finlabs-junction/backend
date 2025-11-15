@@ -321,12 +321,15 @@ class GameController(Controller):
     async def evaluate_player_state(
         self,
         player: Player,
-    ) -> ExplanationResponse:
+    ) -> ChatMessage:
 
         chatbot = Chatbot()
         evaluation = chatbot.evaluate_user_state(player)
 
-        return evaluation
+        return ChatMessage(
+            role="assistant",
+            content=evaluation,
+        )
 
     @post(
         operation_id="PlayerChat",
@@ -337,10 +340,13 @@ class GameController(Controller):
         self,
         player: Player,
         data: list[ChatMessage],
-    ) -> ExplanationResponse:
+    ) -> ChatMessage:
         chatbot = Chatbot()
         response = chatbot.chat(player, data)
-        return response
+        return ChatMessage(
+            role="assistant",
+            content=response,
+        )
 
 
 class LifestyleController(Controller):
