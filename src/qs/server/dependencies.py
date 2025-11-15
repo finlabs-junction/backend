@@ -12,22 +12,22 @@ from qs.exceptions import UnauthorizedError
 
 def get_dependencies() -> dict[str, Provide]:
     return {
-        "session": Provide(provide_session, sync_to_thread=False),
-        "player": Provide(provide_player, sync_to_thread=False),
-        "leader": Provide(provide_leader, sync_to_thread=False),
+        "session": Provide(provide_session),
+        "player": Provide(provide_player),
+        "leader": Provide(provide_leader),
     }
 
 
 @lru_cache(maxsize=1024, ttl=3600)
-def get_session(session_id: str) -> Session:
-    return Session(session_id=session_id)
+async def get_session(session_id: str) -> Session:
+    return await Session.create_scenario_2008(session_id=session_id)
 
 
-def provide_session(session_id: str) -> Session:
-    return get_session(session_id)
+async def provide_session(session_id: str) -> Session:
+    return await get_session(session_id)
 
 
-def provide_player(request: Request) -> Player:
+async def provide_player(request: Request) -> Player:
     settings = get_settings()
 
     if settings.api.debug:
@@ -48,11 +48,11 @@ def provide_player(request: Request) -> Player:
     except Exception:
         raise UnauthorizedError()
 
-    session = get_session(session_id)
+    session = await get_session(session_id)
     return session.get_player(username)
 
 
-def provide_leader(player: Player) -> Player:
+async def provide_leader(player: Player) -> Player:
     if not player.is_leader():
         raise UnauthorizedError()
     

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import asyncio
-from datetime import datetime, timedelta
+from datetime import datetime, date, timedelta
 from enum import StrEnum
 
 from qs.game.player import Player
@@ -9,6 +9,7 @@ from qs.exceptions import (
     PlayerNotFoundError,
     PlayerAlreadyExistsError,
 )
+from qs.game.stocks import get_stock_prices
 
 
 class SessionStatus(StrEnum):
@@ -18,12 +19,35 @@ class SessionStatus(StrEnum):
 
 
 class Session:
-    def __init__(self, session_id: str):
+    def __init__(
+        self, 
+        session_id: str,
+        period: tuple[datetime, datetime],
+        stock_prices: dict[str, dict[date, float]],
+    ):
         self._id = session_id
         self._players: dict[str, Player] = {}
-        self._time = datetime(2007, 12, 2, 12, 0, 0)
+        self._time, self._end_time = period
+        self._stock_prices = stock_prices
         self._time_progression_multiplier = 1
         self._task: asyncio.Task | None = None
+
+
+    @classmethod
+    async def create_scenario_2008(cls, session_id: str) -> Session:
+        start_time = datetime(2008, 1, 1, 12, 0, 0)
+        end_time = datetime(2008, 3, 1, 12, 0, 0)
+
+        stock_prices = await get_stock_prices(
+            symbols=("AAPL", "GOOGL", "MSFT", "AMZN"),
+            period=(start_time, end_time),
+        )
+
+        return cls(
+            session_id=session_id,
+            period=(start_time, end_time),
+            stock_prices=stock_prices,
+        )
 
 
     def get_id(self) -> str:
@@ -88,11 +112,7 @@ class Session:
             return
 
         async def run():
-            # Gathering initial 30 days of ticks
-            for _ in range(30 * 24):
-                self.tick()
-
-            while True:
+            while self._time < self._end_time:
                 for _ in range(self._time_progression_multiplier):
                     self.tick()
 
@@ -110,3 +130,21 @@ class Session:
             return SessionStatus.ENDED
         
         return SessionStatus.RUNNING
+
+
+    def get_stock_price(self, symbol: str) -> float:
+        prices = self._stock_prices[symbol]
+        current_date = self._time.date()
+        first_date = min(prices.keys())
+
+        while current_date >= first_date:
+            if current_date in prices:
+                return prices[current_date]
+            
+            current_date -= timedelta(days=1)
+
+        return prices[first_date]
+
+
+    def get_stock_prices(self) -> dict[str, dict[date, float]]:
+        return self._stock_prices

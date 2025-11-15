@@ -39,9 +39,9 @@ def create_token(session_id: str, username: str) -> str:
     return token.decode("utf-8")
 
 
-def create_session() -> Session:
+async def create_session() -> Session:
     session_id = secrets.token_hex(3).upper()
-    return get_session(session_id)
+    return await get_session(session_id)
 
 
 def set_token_in_response(
@@ -81,7 +81,7 @@ class SessionController(Controller):
         self,
         data: SessionCreateRequest,
     ) -> Response[SessionCreateResponse]:
-        session = create_session()
+        session = await create_session()
 
         session.add_player(data.username, is_leader=True)
 
@@ -159,6 +159,17 @@ class GameController(Controller):
     ) -> PollResponse:
         session = player.get_session()
 
+        stocks = [
+            Position(
+                symbol=symbol,
+                last_price=session.get_stock_price(symbol),
+                size=player.get_position_size(symbol),
+                entry_price=player.get_position_entry_price(symbol),
+                pnl=player.get_position_pnl(symbol),
+            )
+            for symbol in session.get_stock_prices().keys()
+        ]
+
         return PollResponse(
             session_id=session.get_id(),
             session_status=session.get_status(),
@@ -185,6 +196,7 @@ class GameController(Controller):
             monthly_leisure_expense=player.get_monthly_leisure_expense(),
             monthly_loan_expense=player.get_monthly_loan_expense(),
             monthly_tax_expense=player.get_monthly_tax_expense(),
+            stocks=stocks,
         )
 
 
@@ -223,3 +235,53 @@ class GameController(Controller):
         data: float,
     ) -> None:
         player.set_monthly_leisure_expense(data)
+
+
+    @get(
+        operation_id="GetStockPrices",
+        path="/stock-prices",
+    )
+    async def get_stock_prices(
+        self,
+        player: Player,
+    ) -> dict[str, dict[date, float]]:
+        session = player.get_session()
+        return session.get_stock_prices()
+
+
+    @post(
+        operation_id="BuyStock",
+        path="/stock/{symbol:str}/buy",
+    )
+    async def buy_stock(
+        self,
+        player: Player,
+        symbol: str,
+        data: int,
+    ) -> None:
+        player.buy_stock(symbol, data)
+
+    
+    @post(
+        operation_id="SellStock",
+        path="/stock/{symbol:str}/sell",
+    )
+    async def sell_stock(
+        self,
+        player: Player,
+        symbol: str,
+        data: int,
+    ) -> None:
+        player.sell_stock(symbol, data)
+
+
+    @post(
+        operation_id="LiquidateStock",
+        path="/stock/{symbol:str}/liquidate",
+    )
+    async def liquidate_stock(
+        self,
+        player: Player,
+        symbol: str,
+    ) -> None:
+        player.liquidate_stock(symbol)

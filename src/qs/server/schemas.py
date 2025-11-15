@@ -43,4 +43,12 @@ class PollResponse(Struct):
     monthly_leisure_expense: float
     monthly_loan_expense: float
     monthly_tax_expense: float
-    
+    stocks: list[Position]
+
+
+class Position(Struct):
+    symbol: str
+    size: int
+    last_price: float
+    entry_price: float
+    pnl: float
