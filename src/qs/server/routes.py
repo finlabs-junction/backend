@@ -70,7 +70,7 @@ def set_token_in_response(
     else:
         key = "__Session-token"
         secure = True
-        samesite = "none"
+        samesite = "lax"
 
     # For logout (empty token), explicitly expire the cookie for iOS Safari compatibility
     max_age = 0 if not token else 86400 * 30  # 30 days
