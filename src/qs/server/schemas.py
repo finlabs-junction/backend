@@ -36,6 +36,8 @@ class PollResponse(Struct):
     social_life_level: int
     stress_level: int
     living_comfort_level: int
+    career_progress_level: int
+    skills_education_level: int
     monthly_rent_expense: float
     monthly_utilities_expense: float
     monthly_grocery_expense: float
@@ -43,4 +45,3 @@ class PollResponse(Struct):
     monthly_leisure_expense: float
     monthly_loan_expense: float
     monthly_tax_expense: float
-    

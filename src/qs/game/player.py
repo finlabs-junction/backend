@@ -247,6 +247,12 @@ class Player:
     def get_living_comfort_level(self) -> int:
         return self._lifestyle.living_comfort
 
+    def get_career_progress_level(self) -> int:
+        return self._lifestyle.career_progress
+
+    def get_skills_education_level(self) -> int:
+        return self._lifestyle.skills_education
+
     def get_monthly_rent_expense(self) -> float:
         return self._housing_quality.value["cost"] + self._location_type.value["cost"]
 

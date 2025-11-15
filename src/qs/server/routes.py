@@ -187,6 +187,8 @@ class GameController(Controller):
             social_life_level=player.get_social_life_level(),
             stress_level=player.get_stress_level(),
             living_comfort_level=player.get_living_comfort_level(),
+            career_progress_level=player.get_career_progress_level(),
+            skills_education_level=player.get_skills_education_level(),
             monthly_rent_expense=player.get_monthly_rent_expense(),
             monthly_utilities_expense=player.get_monthly_utilities_expense(),
             monthly_grocery_expense=player.get_monthly_grocery_expense(),
