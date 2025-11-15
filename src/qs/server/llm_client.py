@@ -7,7 +7,7 @@ client = OpenAI(api_key=settings.openai.api_key)
 
 def call_llm(system_prompt: str, user_prompt: str) -> str:
     response = client.responses.create(
-        model="gpt-5.1",
+        model="gpt-5.1-mini",
         input=[
             {
                 "role": "developer",
@@ -29,7 +29,7 @@ def call_llm(system_prompt: str, user_prompt: str) -> str:
 
 def call_llm_chat(messages: list) -> str:
     response = client.responses.create(
-        model="gpt-5.1",
+        model="gpt-5.1-mini",
         input=[
             {
                 "role": message.role if hasattr(message, 'role') else message["role"],
