@@ -114,3 +114,30 @@ class ServiceUnavailableError(Error, status_code=HTTP_503_SERVICE_UNAVAILABLE):
 
 class NotImplementError(Error, status_code=HTTP_500_INTERNAL_SERVER_ERROR):
     """The requested operation is not implemented."""
+
+
+class UnauthorizedError(Error, status_code=HTTP_401_UNAUTHORIZED):
+    """Client is not authorized to perform this operation.."""
+
+
+@dataclass
+class UpstreamError(Error, status_code=HTTP_502_BAD_GATEWAY):
+    """An error was encountered while processing the request."""
+
+    details: dict[str, t.Any]
+
+
+@dataclass
+class PlayerNotFoundError(Error, status_code=HTTP_404_NOT_FOUND):
+    """The requested player was not found in the session."""
+
+    session_id: str
+    username: str
+
+
+@dataclass
+class PlayerAlreadyExistsError(Error, status_code=HTTP_409_CONFLICT):
+    """The player with the given username already exists in the session."""
+
+    session_id: str
+    username: str

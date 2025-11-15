@@ -22,7 +22,7 @@ class APISettings(Struct):
     Application name displayed e.g. in the OpenAPI documentation.
     """
 
-    debug: bool = os.environ.get("QS_DEBUG", "True") in TRUE_VALUES
+    debug: bool = os.environ.get("QS_DEBUG", "False") in TRUE_VALUES
     """
     If True, `Litestar` will be run in debug mode. Do not use in production.
     Other behaviour may depend on it as well, look for references.
