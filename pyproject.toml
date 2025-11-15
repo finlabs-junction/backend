@@ -3,18 +3,27 @@ name = "qualityslop-backend"
 version = "0.1.0"
 description = ""
 authors = [
-    {name = "Your Name",email = "you@example.com"}
+    {name = "Dénes Balogh",email = "denes.balogh@icloud.com"}
 ]
 readme = "README.md"
 requires-python = "<4.0,>=3.11"
 dependencies = [
-    "litestar[brotli,jwt] (>=2.18.0,<3.0.0)",
+    "litestar[brotli,jwt,redis,sqlalchemy] (>=2.18.0,<3.0.0)",
     "openai (>=2.8.0,<3.0.0)",
     "uvicorn (>=0.38.0,<0.39.0)",
     "qrcode (>=8.2,<9.0)",
-    "pillow (>=12.0.0,<13.0.0)"
+    "pillow (>=12.0.0,<13.0.0)",
+    "litestar-saq (>=0.5.3,<0.6.0)",
+    "asyncpg (>=0.30.0,<0.31.0)"
 ]
 
+[tool.poetry]
+packages = [
+    { include = "qs", from = "src" },
+]
+
+[tool.poetry.scripts]
+qs = "qs.server.__main__:cli"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
