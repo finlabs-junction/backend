@@ -28,6 +28,7 @@ def fetch_stock_prices(
         end=end_day,
         progress=False,
         auto_adjust=False,
+        actions=True,
         group_by="ticker",
     )
 
@@ -54,14 +55,7 @@ async def get_stock_prices(
     div: dict[str, dict[date, float]] = {}
 
     for sym in symbols:
-        if sym not in df:
-            out[sym] = {}
-            continue
-        
         sub = df[sym].dropna()
-        if sub.empty:
-            out[sym] = {}
-            continue
 
         sub["avg"] = (sub["High"] + sub["Low"]) / 2
 

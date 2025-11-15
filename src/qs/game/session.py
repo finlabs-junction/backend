@@ -164,7 +164,18 @@ class Session:
             current_date -= timedelta(days=1)
 
         return prices[first_date]
-
+    
 
     def get_stock_prices(self) -> dict[str, dict[date, float]]:
         return self._stock_prices
+
+
+    def get_dividend(self, symbol: str) -> float:
+        try:
+            return self._dividends[symbol][self._time.date()]
+        except:
+            return 0.0
+
+
+    def get_dividends(self) -> dict[str, dict[date, float]]:
+        return self._dividends

@@ -295,6 +295,18 @@ class GameController(Controller):
     ) -> dict[str, dict[date, float]]:
         session = player.get_session()
         return session.get_stock_prices()
+    
+
+    @get(
+        operation_id="GetDividends",
+        path="/dividends",
+    )
+    async def get_dividends(
+        self,
+        player: Player,
+    ) -> dict[str, dict[date, float]]:
+        session = player.get_session()
+        return session.get_dividends()
 
 
     @post(
