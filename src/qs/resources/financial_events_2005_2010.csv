@@ -1,0 +1,96 @@
+ID,Date,Event Title,Description
+1,"February 28, 2005",Apple Stock Split 2:1,"Apple Inc. conducts a 2-for-1 stock split, doubling the number of shares outstanding."
+2,December 2005,Verizon Acquires MCI,Verizon Communications completes acquisition of MCI (formerly WorldCom) for approximately $7.6 billion.
+3,March 2006,China Shanghai Composite Rises,Chinese stock market experiences significant rally with Shanghai Composite index reaching new highs.
+4,May 2006,Commercial Real Estate Peak,Commercial real estate prices reach peak levels before subsequent decline begins.
+5,July 2006,Federal Reserve Keeps Rates Steady,"Federal Reserve maintains federal funds rate at 5.25%, the peak of the tightening cycle."
+6,September 2006,Housing Prices Begin Decline,"U.S. house prices decline for first time in 11 years on annual basis, median prices fall 1.7%."
+7,"February 27, 2007",Stock Market Flash Crash,"Dow Jones Industrial Average falls 416 points (3.3%), its biggest one-day point loss since 9/11."
+8,February 2007,Subprime Lenders Begin Bankruptcy,More than 25 subprime mortgage lending firms declare bankruptcy in February and March 2007.
+9,"April 2, 2007",New Century Financial Bankruptcy,"New Century Financial Corporation, largest U.S. subprime lender, files for bankruptcy protection."
+10,June 2007,Blackstone IPO,"The Blackstone Group completes IPO raising $4.13 billion, becoming a publicly traded company."
+11,July 2007,Bear Stearns Hedge Funds Collapse,Bear Stearns announces that two of its hedge funds have lost nearly all investor capital.
+12,"July 31, 2007",Bear Stearns Hedge Funds Liquidated,Bear Stearns High-Grade Structured Credit Fund and High-Grade Structured Credit Strategies Fund are liquidated.
+13,"August 6, 2007",American Home Mortgage Bankruptcy,American Home Mortgage Investment Corporation files for bankruptcy amid subprime mortgage crisis.
+14,"August 9, 2007",BNP Paribas Crisis,BNP Paribas suspends withdrawals from three hedge funds citing 'complete evaporation of liquidity.'
+15,"August 16, 2007",Fed Cuts Discount Rate,Federal Reserve lowers discount rate by 0.5% to provide liquidity to financial markets.
+16,"September 14, 2007",Northern Rock Bank Run,"Northern Rock, British bank, seeks emergency support from Bank of England; depositor panic ensues."
+17,"September 18, 2007",Federal Reserve Rate Cut,Federal Open Market Committee cuts federal funds rate from 5.25% to 4.75%.
+18,"September 28, 2007",NetBank Bankruptcy,NetBank files for bankruptcy due to exposure to subprime home loans.
+19,"October 9, 2007",DJIA Peak,"Dow Jones Industrial Average hits record closing price of 14,164.53."
+20,"October 15, 2007",MLEC Announcement,"Citigroup, Bank of America, and JPMorgan Chase announce $80 billion Master Liquidity Enhancement Conduit."
+21,"November 26, 2007",Market Correction Begins,U.S. stock markets enter correction territory as financial sector concerns mount.
+22,"December 11, 2007",Fed Term Auction Facility,Federal Reserve institutes Term Auction Facility to supply short-term credit to banks.
+23,December 2007,Recession Begins,U.S. economy officially enters recession; unemployment reaches 5%.
+24,"January 21, 2008",Global Stock Market Crash,"FTSE 100 Index plunges 5.5% (323.5 points), largest crash since 9/11 attacks."
+25,"January 22, 2008",Emergency Fed Rate Cut,"Federal Reserve cuts interest rates by 0.75% (75 basis points), largest cut in 25 years."
+26,February 2008,Merrill Lynch Major Write-Down,Merrill Lynch announces $7.9 billion in write-downs on mortgage-backed securities.
+27,"March 5, 2008",Carlyle Capital Default,Carlyle Capital Corporation receives default notice after failing margin calls.
+28,"March 11, 2008",Fed Rate Cut,Federal Reserve cuts federal funds rate from 3.5% to 3.0%.
+29,"March 16, 2008",Bear Stearns Liquidity Crisis,Bear Stearns announces severe liquidity problems requiring emergency funding.
+30,"March 24, 2008",Bear Stearns Acquisition,JPMorgan Chase announces acquisition of Bear Stearns with $30 billion Fed financing.
+31,"March 30, 2008",Bear Stearns Deal Revised,JPMorgan Chase increases offer price for Bear Stearns from $2 to $10 per share.
+32,May 2008,Oil Prices Rise,Crude oil prices surge past $130 per barrel amid supply concerns.
+33,"June 5, 2008",Countrywide Acquisition,Bank of America completes acquisition of Countrywide Financial for $4.1 billion.
+34,"July 11, 2008",IndyMac Bank Failure,"Office of Thrift Supervision closes IndyMac Bank, F.S.B., fourth-largest bank failure in U.S. history."
+35,"July 30, 2008",Housing Recovery Act,President Bush signs Housing and Economic Recovery Act authorizing FHFA creation.
+36,"September 3, 2008",GSE Concern Peaks,Fannie Mae and Freddie Mac stock prices fall sharply amid default concerns.
+37,"September 7, 2008",GSE Conservatorship,Federal Housing Finance Agency places Fannie Mae and Freddie Mac in government conservatorship.
+38,"September 8, 2008",WaMu Enforcement Action,Office of Thrift Supervision issues public enforcement action against Washington Mutual.
+39,"September 14, 2008",Merrill Lynch Sold,Merrill Lynch agrees to sale to Bank of America for $50 billion (stock deal).
+40,"September 15, 2008",Lehman Brothers Bankruptcy,Lehman Brothers Holdings Inc. files for Chapter 11 bankruptcy protection ($600 billion).
+41,"September 15, 2008",DJIA Plunge,"Dow Jones Industrial Average falls 504.48 points (4.42%), worst decline in seven years."
+42,"September 16, 2008",AIG Federal Reserve Bailout,Federal Reserve authorizes $85 billion emergency loan to American International Group (AIG).
+43,"September 17, 2008",Money Market Fund Run,"Investors withdraw $144 billion from money market funds, equivalent to bank run."
+44,"September 17, 2008",SEC Short-Selling Ban,SEC announces temporary emergency ban on short selling in financial sector stocks.
+45,"September 18, 2008",Treasury/Fed Warning,Treasury Secretary Paulson and Fed Chair Bernanke warn Congress of potential financial collapse.
+46,"September 21, 2008",Goldman Sachs Bank Status,Federal Reserve approves Goldman Sachs and Morgan Stanley as bank holding companies.
+47,"September 22, 2008",MUFG/Morgan Stanley Deal,MUFG Bank acquires 20% stake in Morgan Stanley.
+48,"September 23, 2008",Berkshire Hathaway Investment,Berkshire Hathaway invests $5 billion in Goldman Sachs.
+49,"September 25, 2008",Washington Mutual Seizure,Office of Thrift Supervision seizes Washington Mutual Bank (largest bank failure in U.S. history).
+50,"September 25, 2008",JPMorgan/WaMu Deal,JPMorgan Chase acquires Washington Mutual for $1.9 billion.
+51,"September 29, 2008",TARP Rejected,U.S. House of Representatives rejects $700 billion bank bailout bill initially.
+52,"October 3, 2008",Emergency Stabilization Act,President Bush signs Emergency Economic Stabilization Act (TARP).
+53,"October 6-10, 2008",Dow Weekly Crash,DJIA falls 18.2% in worst weekly decline on both points and percentage basis.
+54,"October 12, 2008",Wells Fargo/Wachovia Deal,Wells Fargo completes acquisition of Wachovia Corporation.
+55,"October 14, 2008",TARP Capital Injections,Nine large financial institutions receive $125 billion in capital from TARP.
+56,"October 24, 2008",PNC/National City Deal,PNC Financial Services acquires National City Corporation for $5.4 billion.
+57,"October 29, 2008",Global Market Crash,Stock markets worldwide fall 10% or more amid financial crisis panic.
+58,"November 10, 2008",AIG Restructuring,Federal Reserve and Treasury announce restructuring of government financial support for AIG.
+59,"November 11, 2008",Loan Modification Program,U.S. Treasury announces HOPE NOW alliance loan modification program.
+60,"November 18, 2008",Auto Bailout Request,"Ford, GM, and Chrysler executives testify before Congress requesting TARP access."
+61,"November 20, 2008",Mortgage Foreclosure Suspension,Fannie Mae and Freddie Mac suspend mortgage foreclosures until January 2009.
+62,"November 23, 2008",Citigroup Bailout,"Treasury Department, Federal Reserve, and FDIC announce Citigroup rescue package."
+63,"November 26, 2008",Bank of America/Merrill Lynch,Federal Reserve approves Bank of America's acquisition of Merrill Lynch.
+64,"December 3, 2008",Credit Rating Transparency,SEC approves measures for increased transparency at credit rating agencies.
+65,"December 11, 2008",Recession Confirmation,National Bureau of Economic Research announces U.S. recession began in December 2007.
+66,"December 19, 2008",Auto Industry Loans,Treasury Department authorizes loans for General Motors ($13.4 billion) and Chrysler ($4 billion).
+67,"December 22, 2008",CIT Group Bank Holding Status,Federal Reserve approves CIT Group application to become bank holding company.
+68,January 2009,Global Recession Deepens,Global economies begin formal recession declarations; central banks cut rates in coordination.
+69,"January 27, 2009",DJIA Drop,"Dow Jones falls to 7,949.09, its lowest level since September 2003."
+70,"February 27, 2009",DJIA Lowest Point,DJIA closes at lowest value since 1997; U.S. government increases Citigroup stake to 36%.
+71,"March 2, 2009",Great Depression Comparison,Stock price declines compared to those of the Great Depression era.
+72,"March 9, 2009",Stock Market Bottom,S&P 500 reaches lowest point at 676.53 (approximate bottom of crisis).
+73,"March 18, 2009",Federal Reserve Rate Cut,Federal Reserve cuts federal funds rate to near-zero (0-0.25% range).
+74,May 2009,Stress Test Results,Federal Reserve releases results of stress tests for major financial institutions.
+75,July 2009,General Motors Bankruptcy,General Motors emerges from Chapter 11 bankruptcy after government restructuring.
+76,August 2009,Chrysler Bankruptcy Exit,Chrysler emerges from Chapter 11 bankruptcy with Fiat partnership.
+77,September 2009,AIG Profit Announcement,AIG announces $3 billion profit in third quarter as markets stabilize.
+78,September 2009,Obama Financial Reform,President Obama proposes comprehensive financial system reform package.
+79,October 2009,Banking Stress Tests Release,Results of supervisory capital assessment program (stress tests) released publicly.
+80,November 2009,Stock Market Rally,"S&P 500 crosses 1,000 level as investor sentiment improves."
+81,December 2009,Market Recovery,Stock indices approach pre-crisis levels; credit markets show signs of normalization.
+82,"December 16, 2009",Fed Rate Guidance,Federal Reserve indicates interest rates likely to remain near zero for extended period.
+83,January 2010,Market Momentum Continues,Stock markets continue recovery with S&P 500 advancing further.
+84,February 2010,"DJIA Breaks 10,000","Dow Jones Industrial Average breaks 10,000 barrier for first time since 2008."
+85,April 2010,Oil Well Blowout,Deepwater Horizon oil rig explosion causes largest environmental disaster.
+86,"May 6, 2010",Flash Crash,"Dow Jones suffers worst intra-day point loss of 998.5 points (9%), then partially recovers."
+87,"May 6, 2010",Circuit Breaker Triggered,"S&P 500, Nasdaq experience rapid declines and rebounds; individual stocks fall to pennies."
+88,"May 6, 2010",Procter & Gamble Plunge,"Procter & Gamble stock drops 37% before recovering; prices momentarily reach $100,000+."
+89,"May 10, 2010",European Debt Crisis,Greek debt crisis fears spread; European leaders announce €110 billion bailout package for Greece.
+90,"May 28, 2010",Circuit Breaker Rules,SEC approves broader circuit breaker rules for index securities and individual stocks.
+91,June 2010,Unemployment Remains High,U.S. unemployment rate holds above 9% as recovery remains uneven.
+92,July 2010,Goldman Sachs Settlement,SEC brings civil fraud charges against Goldman Sachs for mortgage CDO misrepresentation.
+93,"July 15, 2010",Dodd-Frank Signed,President Obama signs Dodd-Frank Wall Street Reform Act into law.
+94,September 2010,Financial Crisis Officially Ends,National Bureau of Economic Research declares recession ended in June 2009.
+95,October 2010,Recovery Act Effects,Continuing benefits of American Recovery Act visible in job growth and GDP expansion.
