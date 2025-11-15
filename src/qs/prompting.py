@@ -69,3 +69,27 @@ def build_text_explanation_prompt(text: str, context: str) -> str:
         text=text,
         context=context,
     )
+
+
+STATE_EVALUATION_TEMPLATE = """
+Player State:
+{player_state}
+
+Evaluate the player's current financial state based on the information above.
+Provide a brief summary of their financial health and suggest areas for improvement.
+Write ONLY 2 to 4 sentences.
+Use simple words, as if explaining to a 14-year-old.
+
+Financial events from the past 4 weeks:
+{events}
+
+Provide your evaluation below:
+"""
+
+
+def build_state_evaluation_prompt(player_state: str, events: list[str]) -> str:
+    events_text = "\n".join(f"- {event}" for event in events)
+    return STATE_EVALUATION_TEMPLATE.format(
+        player_state=player_state,
+        events=events_text,
+    )

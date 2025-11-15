@@ -7,6 +7,7 @@ from authlib.jose import jwt
 
 from qs.contrib.litestar import *
 from qs.events_data import get_event_by_id
+from qs.nlp.chatbot import Chatbot
 from qs.prompting import (
     EVENT_EXPLANATION_SYSTEM_PROMPT,
     EVENT_HINT_SYSTEM_PROMPT,
@@ -311,6 +312,35 @@ class GameController(Controller):
         symbol: str,
     ) -> None:
         player.liquidate_stock(symbol)
+
+    @get(
+        operation_id="PlayerStateEvaluation",
+        path="/evaluate-player-state",
+        tags=["Explanations"],
+    )
+    async def evaluate_player_state(
+        self,
+        player: Player,
+    ) -> ExplanationResponse:
+
+        chatbot = Chatbot()
+        evaluation = chatbot.evaluate_user_state(player)
+
+        return evaluation
+
+    @post(
+        operation_id="PlayerChat",
+        path="/chat",
+        tags=["Explanations"]
+    )
+    async def player_chat(
+        self,
+        player: Player,
+        data: list[ChatMessage],
+    ) -> ExplanationResponse:
+        chatbot = Chatbot()
+        response = chatbot.chat(player, data)
+        return response
 
 
 class LifestyleController(Controller):

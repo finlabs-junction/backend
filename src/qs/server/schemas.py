@@ -83,6 +83,11 @@ class TextExplanationRequest(Struct):
     context: str
 
 
+class ChatMessage(Struct):
+    role: str  # 'system', 'user', 'assistant'
+    content: str
+
+
 class ExplanationResponse(Struct):
     explanation: str
     hint: str | None = None
