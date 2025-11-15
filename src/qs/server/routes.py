@@ -8,7 +8,12 @@ from authlib.jose import jwt
 
 from qs.contrib.litestar import *
 from qs.events_data import get_event_by_id
-from qs.prompting import build_event_prompt
+from qs.prompting import (
+    EVENT_EXPLANATION_SYSTEM_PROMPT,
+    TEXT_EXPLANATION_SYSTEM_PROMPT,
+    build_event_prompt,
+    build_text_explanation_prompt,
+)
 from qs.server import get_settings
 from qs.server.exceptions import *
 from qs.server.llm_client import call_llm
@@ -23,6 +28,8 @@ def get_routes() -> list[ControllerRouterHandler]:
     return [
         SessionController,
         GameController,
+        explain_event,
+        explain_text
     ]
 
 
@@ -348,16 +355,33 @@ class GameController(Controller):
         player.liquidate_stock(symbol)
 
 
-    @get(
-        operation_id="ExplainEvent",
-        path="/events/{event_id:int}/explanation",
-    )
-    async def explain_event(self, event_id: int) -> ExplanationResponse:
-        event = get_event_by_id(event_id)
-        if event is None:
-            raise NotFoundError("Event not found")
+@post(
+    operation_id="ExplainEvent",
+    path="/events/{event_id:int}/explanation",
+    tags=["Explanations"],
+)
+async def explain_event(
+    event_id: int
+) -> ExplanationResponse:
+    event = get_event_by_id(event_id)
+    if event is None:
+        raise NotFoundError("Event not found")
 
-        prompt = build_event_prompt(event)
-        text = call_llm(prompt)
+    prompt = build_event_prompt(event)
+    text = call_llm(EVENT_EXPLANATION_SYSTEM_PROMPT, prompt)
 
-        return ExplanationResponse(explanation=text)
+    return ExplanationResponse(explanation=text)
+
+
+@post(
+    operation_id="ExplainText",
+    path="/explain-text",
+    tags=["Explanations"],
+)
+async def explain_text(
+    data: TextExplanationRequest
+) -> ExplanationResponse:
+    prompt = build_text_explanation_prompt(data.text, data.context)
+    text = call_llm(TEXT_EXPLANATION_SYSTEM_PROMPT, prompt)
+
+    return ExplanationResponse(explanation=text)

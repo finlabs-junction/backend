@@ -1,20 +1,19 @@
 from openai import OpenAI
 from qs.server import get_settings
-from qs.prompting import SYSTEM_PROMPT
 
 settings = get_settings()
 client = OpenAI(api_key=settings.openai.api_key)
 
 
-def call_llm(prompt: str) -> str:
+def call_llm(system_prompt: str, user_prompt: str) -> str:
     response = client.responses.create(
         model="gpt-5.1",
         input=[
             {
                 "role": "developer",
-                "content": [{"type": "input_text", "text": SYSTEM_PROMPT}],
+                "content": [{"type": "input_text", "text": system_prompt}],
             },
-            {"role": "user", "content": [{"type": "input_text", "text": prompt}]},
+            {"role": "user", "content": [{"type": "input_text", "text": user_prompt}]},
         ],
         text={"format": {"type": "text"}, "verbosity": "medium"},
         reasoning={"effort": "medium", "summary": "auto"},

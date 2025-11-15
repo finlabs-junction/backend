@@ -1,4 +1,4 @@
-SYSTEM_PROMPT = """
+EVENT_EXPLANATION_SYSTEM_PROMPT = """
 You are a financial literacy tutor for teenagers.
 
 An event is given below. Explain what happened in simple language.
@@ -22,4 +22,35 @@ def build_event_prompt(event: dict) -> str:
         date=event["date"],
         title=event["title"],
         description=event["description"],
+    )
+
+
+TEXT_EXPLANATION_TEMPLATE = """
+Sentence:
+{context}
+
+Highlighted text:
+"{text}"
+"""
+
+TEXT_EXPLANATION_SYSTEM_PROMPT = """
+You are a financial literacy tutor for teenagers.
+
+Some text is highlighted inside a sentence. Explain what the text means,
+given the sentence it appears in.
+
+Explain the text in simple language, based on how it is used in this sentence.
+
+Requirements:
+- Write ONLY 1 to 3 sentences.
+- Use simple words, as if explaining to a 14-year-old.
+- Focus on the meaning of the text in this context.
+- Do not add extra information unrelated to the sentence.
+"""
+
+
+def build_text_explanation_prompt(text: str, context: str) -> str:
+    return TEXT_EXPLANATION_TEMPLATE.format(
+        text=text,
+        context=context,
     )
