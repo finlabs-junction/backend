@@ -10,10 +10,15 @@ class SessionCreateRequest(Struct):
 
 class SessionCreateResponse(Struct):
     session_id: str
+    token: str
 
 
 class SessionJoinRequest(Struct):
     username: str
+
+
+class SessionJoinResponse(Struct):
+    token: str
 
 
 class EventResponse(Struct):

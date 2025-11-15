@@ -29,15 +29,18 @@ async def provide_session(session_id: str) -> Session:
 
 async def provide_player(request: Request) -> Player:
     settings = get_settings()
-
-    if settings.api.debug:
-        key = "token"
-    else:
-        key = "__Session-token"
+    
+    # Get token from Authorization header
+    auth_header = request.headers.get("Authorization", "")
+    if not auth_header.startswith("Bearer "):
+        raise UnauthorizedError()
+    
+    token = auth_header[7:]  # Remove "Bearer " prefix
+    
+    if not token:
+        raise UnauthorizedError()
     
     try:
-        token = request.cookies[key]
-
         payload = jwt.decode(
             token,
             settings.api.jwt_secret_key,

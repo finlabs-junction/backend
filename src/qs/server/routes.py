@@ -3,7 +3,6 @@ from __future__ import annotations
 import typing as t
 import secrets
 
-from litestar import Response
 from authlib.jose import jwt
 
 from qs.contrib.litestar import *
@@ -57,35 +56,6 @@ async def create_session() -> Session:
     return await get_session(session_id)
 
 
-def set_token_in_response(
-    response: Response,
-    token: str,
-) -> None:
-    settings = get_settings()
-
-    if settings.api.debug:
-        key = "token"
-        secure = False
-        samesite = "strict"
-    else:
-        key = "__Session-token"
-        secure = True
-        samesite = "lax"
-
-    # For logout (empty token), explicitly expire the cookie for iOS Safari compatibility
-    max_age = 0 if not token else 86400 * 30  # 30 days
-    
-    response.set_cookie(
-        key=key,
-        value=token,
-        httponly=True,
-        secure=secure,
-        samesite=samesite,
-        path="/",
-        max_age=max_age,
-    )
-
-
 class SessionController(Controller):
     path = "/session"
     tags = ["Sessions"]
@@ -98,7 +68,7 @@ class SessionController(Controller):
     async def create(
         self,
         data: SessionCreateRequest,
-    ) -> Response[SessionCreateResponse]:
+    ) -> SessionCreateResponse:
         session = await create_session()
 
         session.add_player(data.username, is_leader=True)
@@ -108,14 +78,10 @@ class SessionController(Controller):
             username=data.username,
         )
 
-        content = SessionCreateResponse(
+        return SessionCreateResponse(
             session_id=session.get_id(),
+            token=token,  # Token returned in response body for client to use in Authorization header
         )
-
-        response = Response(content)
-        set_token_in_response(response, token)
-
-        return response
 
     @post(
         operation_id="SessionJoin",
@@ -125,7 +91,7 @@ class SessionController(Controller):
         self,
         session: Session,
         data: SessionJoinRequest,
-    ) -> Response:
+    ) -> SessionJoinResponse:
         session.add_player(data.username)
 
         token = create_token(
@@ -133,19 +99,16 @@ class SessionController(Controller):
             username=data.username,
         )
 
-        response = Response(None)
-        set_token_in_response(response, token)
-
-        return response
+        return SessionJoinResponse(
+            token=token,  # Token returned in response body for client to use in Authorization header
+        )
 
     @get(
         operation_id="Logout",
         path="/logout",
     )
-    async def logout(self) -> Response:
-        response = Response(None)
-        set_token_in_response(response, "")
-        return response
+    async def logout(self) -> None:
+        return None
 
 
 class GameController(Controller):
