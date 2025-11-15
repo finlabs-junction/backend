@@ -31,7 +31,7 @@ def create_token(session_id: str, username: str) -> str:
     }
 
     token = jwt.encode(
-        { "alg": "HS256" },
+        {"alg": "HS256"},
         payload,
         settings.api.jwt_secret_key,
     )
@@ -73,7 +73,6 @@ class SessionController(Controller):
     tags = ["Session"]
     signature_types = [Session, Player]
 
-
     @post(
         operation_id="SessionCreate",
         path="/create"
@@ -100,7 +99,6 @@ class SessionController(Controller):
 
         return response
 
-
     @post(
         operation_id="SessionJoin",
         path="/{session_id:str}/join",
@@ -119,6 +117,20 @@ class SessionController(Controller):
 
         response = Response(None)
         set_token_in_response(response, token)
+
+        return response
+
+    @get(
+        operation_id="logout",
+        path="/logout",
+    )
+    async def logout(
+        self,
+        player: Player,
+    ) -> Response:
+        # just remove the cookie storing the token
+        response = Response(None)
+        set_token_in_response(response, "")
 
         return response
 

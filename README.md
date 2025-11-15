@@ -1,5 +1,19 @@
 ## Financial Literacy Game
 
+Installing the package:
+
+```sh
+poetry install
+```
+
+Entering the virtual environment:
+
+```sh
+$(poetry env activate)
+```
+
+> You need to activate the virtual environment before running the server.
+
 Running the server in production mode:
 
 ```sh
