@@ -16,15 +16,15 @@ class Occupation(StrEnum):
 
 
 class BaseDecays(Enum):
-    HEALTH = -2
-    HAPPINESS = -5
-    SOCIAL_LIFE = -10
-    CAREER = +1
+    HEALTH = -.5
+    HAPPINESS = -5/4
+    SOCIAL_LIFE = -2
+    CAREER = +.1
 
 
 class FOOD_TYPE(Enum):
     FAST_FOOD = {
-        "health": -5,
+        "health": -1,
         "cost": 100
     }
     HOME_COOKED = {
@@ -32,54 +32,54 @@ class FOOD_TYPE(Enum):
         "cost": 150
     }
     ORGANIC = {
-        "health": +5,
+        "health": +1.5,
         "cost": 250
     }
 
 
 class HOUSING_QUALITY(Enum):
     LOW = {
-        "happiness": -3,
-        "comfort": -1,
+        "happiness": -3/4,
+        "comfort": -1/4,
         "cost": 800
     }
     MEDIUM = {
-        "happiness": +1,
-        "comfort": +15,
+        "happiness": +1/4,
+        "comfort": +15/4,
         "cost": 1500
     }
     HIGH = {
-        "happiness": +5,
-        "comfort": +25,
+        "happiness": +5/4,
+        "comfort": +25/4,
         "cost": 3000
     }
 
 
 class LOCATION_TYPE(Enum):
     SUBURBS = {
-        "comfort": -5,
+        "comfort": -5/4,
         "cost": 1000
     }
     CITY_CENTER = {
-        "comfort": +30,
+        "comfort": +30/4,
         "cost": 2000
     }
     RURAL = {
-        "comfort": -10,
+        "comfort": -10/4,
         "cost": 500
     }
 
 
 class UserLifestyle:
     def __init__(
-        self, 
-        health: float, 
-        happiness: float, 
-        energy: float, 
-        social_life: float, 
+        self,
+        health: float,
+        happiness: float,
+        energy: float,
+        social_life: float,
         stress_level: float,
-        living_comfort: float, 
-        career_progress: float, 
+        living_comfort: float,
+        career_progress: float,
         skills_education: float,
     ):
         self.health = health
@@ -91,44 +91,58 @@ class UserLifestyle:
         self.career_progress = career_progress
         self.skills_education = skills_education
 
-
     def update_health(
         self,
-        food_type: FOOD_TYPE, 
-        leisure_spent: float, 
+        food_type: FOOD_TYPE,
+        leisure_spent: float,
         current_month: float,
     ) -> float:
         bonus = food_type.value["health"]
         self.health += bonus + BaseDecays.HEALTH.value + leisure_spent / 50
         if current_month in [11, 12, 1, 2]:  # Winter months
             self.health -= 2  # Additional health decay in winter
+
+        if self.health < 0:
+            self.health = 0
+        elif self.health > 100:
+            self.health = 100
+
         return self.health
 
-
     def update_happiness(
-        self, 
-        leisure_spent: float, 
-        housing_quality: HOUSING_QUALITY, 
-        housing_has_sauna: bool, 
+        self,
+        leisure_spent: float,
+        housing_quality: HOUSING_QUALITY,
+        housing_has_sauna: bool,
         events: list[str],
     ) -> float:
         bonus = housing_quality.value["happiness"]
         sauna_bonus = 2 if housing_has_sauna else 0
-        event_bonus = 10 if 'salary_bonus' in events else -5
+        event_bonus = 10 if 'salary_bonus' in events else 0
         self.happiness += bonus + sauna_bonus + event_bonus + \
-            BaseDecays.HAPPINESS.value + leisure_spent / 30
-        return self.happiness
+            BaseDecays.HAPPINESS.value + leisure_spent / 10
 
+        if self.happiness < 0:
+            self.happiness = 0
+        elif self.happiness > 100:
+            self.happiness = 100
+
+        return self.happiness
 
     def update_energy(self, work_hours_per_week: int, month: int) -> float:
         health_loss = (100 - self.health) / 2
         work_loss = (work_hours_per_week - 40) * \
-            2 if work_hours_per_week > 40 else -2
+            2 if work_hours_per_week > 40 else 0
         seasonal_bonus = 5 if month in [
             6, 7, 8] else -5 if month in [11, 12, 1, 2] else 0
         self.energy += seasonal_bonus - health_loss - work_loss
-        return self.energy
 
+        if self.energy < 0:
+            self.energy = 0
+        elif self.energy > 100:
+            self.energy = 100
+
+        return self.energy
 
     def update_social_life(
         self,
@@ -136,11 +150,16 @@ class UserLifestyle:
         work_hours_per_week: int,
     ) -> float:
         work_impact = (work_hours_per_week -
-                       40) / 5 if work_hours_per_week > 40 else 0
+                       40) / 5 if work_hours_per_week > 40 else (40 - work_hours_per_week) / 2
         self.social_life += (leisure_spent / 100) + \
             BaseDecays.SOCIAL_LIFE.value - work_impact
-        return self.social_life
 
+        if self.social_life < 0:
+            self.social_life = 0
+        elif self.social_life > 100:
+            self.social_life = 100
+
+        return self.social_life
 
     def update_stress_level(
         self,
@@ -167,37 +186,57 @@ class UserLifestyle:
                              stock_exposure / monthly_expenses)
 
         self.stress_level += stress_change
+
+        if self.stress_level < 0:
+            self.stress_level = 0
+        elif self.stress_level > 100:
+            self.stress_level = 100
+
         return self.stress_level
 
-
     def update_living_comfort(
-        self, 
-        housing_quality: HOUSING_QUALITY, 
-        location_type: LOCATION_TYPE, 
+        self,
+        housing_quality: HOUSING_QUALITY,
+        location_type: LOCATION_TYPE,
         private_living_space_sqm: float,
     ) -> float:
         comfort_bonus = housing_quality.value["comfort"] + \
             location_type.value["comfort"] + private_living_space_sqm
         self.living_comfort = comfort_bonus
+
+        if self.living_comfort < 0:
+            self.living_comfort = 0
+        elif self.living_comfort > 100:
+            self.living_comfort = 100
+
         return self.living_comfort
 
-
     def update_career_progress(
-        self, 
-        is_employed: bool, 
+        self,
+        is_employed: bool,
         leisure_spent: float,
     ) -> float:
         if is_employed:
             self.career_progress += BaseDecays.CAREER.value + \
-                (leisure_spent / 200)
+                (leisure_spent / 2000)
         else:
             self.career_progress -= 2
 
+        if self.career_progress < 0:
+            self.career_progress = 0
+        elif self.career_progress > 100:
+            self.career_progress = 100
+
         return self.career_progress
 
-
     def update_skills_education(self, education_hours_per_week: int) -> float:
-        self.skills_education += education_hours_per_week / 2
+        self.skills_education += education_hours_per_week / 24
+
+        if self.skills_education < 0:
+            self.skills_education = 0
+        elif self.skills_education > 100:
+            self.skills_education = 100
+
         return self.skills_education
 
 
@@ -249,26 +288,20 @@ class Player:
         )
         self._events = []
 
-
     def get_session(self) -> Session:
         return self._session
-
 
     def get_events(self) -> list[dict]:
         return self._events
 
-
     def get_username(self) -> str:
         return self._username
-
 
     def is_leader(self) -> bool:
         return self._is_leader
 
-
     def get_balance(self) -> float:
         return self._balance
-    
 
     def get_assets(self) -> float:
         stocks = sum(
@@ -278,10 +311,8 @@ class Player:
 
         return self._balance + stocks
 
-
     def get_monthly_income(self) -> float:
         return self.get_monthly_salary() + self.get_monthly_dividends()
-
 
     def get_monthly_expenses(self) -> float:
         return (
@@ -294,139 +325,108 @@ class Player:
             self.get_monthly_tax_expense()
         )
 
-
     def get_monthly_net_income(self) -> float:
         return self.get_monthly_income() - self.get_monthly_expenses()
-
 
     def get_occupation(self) -> Occupation:
         return self._occupation
 
-
     def get_monthly_salary(self) -> float:
         return get_monthly_salary(self._occupation)
-
 
     def get_health_level(self) -> int:
         return round(self._lifestyle.health)
 
-
     def get_happiness_level(self) -> int:
         return round(self._lifestyle.happiness)
-
 
     def get_energy_level(self) -> int:
         return round(self._lifestyle.energy)
 
-
     def get_social_life_level(self) -> int:
         return round(self._lifestyle.social_life)
-
 
     def get_stress_level(self) -> int:
         return round(self._lifestyle.stress_level)
 
-
     def get_living_comfort_level(self) -> int:
         return round(self._lifestyle.living_comfort)
-
 
     def get_career_progress_level(self) -> int:
         return round(self._lifestyle.career_progress)
 
-
     def get_skills_education_level(self) -> int:
         return round(self._lifestyle.skills_education)
-
 
     def get_monthly_rent_expense(self) -> float:
         return self._housing_quality.value["cost"] + self._location_type.value["cost"]
 
-
     def get_monthly_utilities_expense(self) -> float:
         return 200
-
 
     def get_monthly_grocery_expense(self) -> float:
         return self._food_type.value["cost"]
 
-
     def set_monthly_grocery_expense(self, amount: float) -> None:
         self._monthly_grocery_expense = amount
-
 
     def get_monthly_transportation_expense(self) -> float:
         return 150
 
-
     def get_monthly_leisure_expense(self) -> float:
         return self._monthly_leisure_expense
-
 
     def set_monthly_leisure_expense(self, amount: float) -> None:
         self._monthly_leisure_expense = amount
 
-
     def get_monthly_loan_expense(self) -> float:
         return 400
 
-
     def get_monthly_tax_expense(self) -> float:
         return 500
-
 
     def credit(self, amount: float) -> None:
         """Credit the player's balance."""
         self._balance += amount
 
-
     def debit(self, amount: float) -> None:
         """Debit the player's balance."""
         self._balance -= amount
 
-
     def receive_salary(self) -> None:
         """Receive the monthly salary."""
         self.credit(self.get_monthly_salary())
-
 
     def buy_meal(self) -> None:
         """Buy a meal. Players eat three times a day."""
         expense = self.get_monthly_grocery_expense() * 4 / 365
         self.debit(expense)
 
-
     def pay_daily_transportation(self) -> None:
         """Pay for daily transportation."""
         expense = self.get_monthly_transportation_expense() * 12 / 365
         self.debit(expense)
-
 
     def pay_daily_leisure(self) -> None:
         """Pay for daily leisure."""
         expense = self.get_monthly_leisure_expense() * 12 / 365
         self.debit(expense)
 
-
     def pay_taxes(self) -> None:
         """Pay the monthly tax expense."""
         self.debit(self.get_monthly_tax_expense())
-
 
     def pay_rent(self) -> None:
         """Pay the monthly rent expense."""
         self.debit(self.get_monthly_rent_expense())
 
-
     def pay_utilities(self) -> None:
         """Pay the monthly utilities expense."""
         self.debit(self.get_monthly_utilities_expense())
 
-
     def pay_loan_installment(self) -> None:
         """Pay the monthly loan installment."""
         self.debit(self.get_monthly_loan_expense())
-
 
     def get_events_for_date(self) -> None:
         session_time = self._session.get_time()
@@ -448,7 +448,6 @@ class Player:
         else:
             self._events = []
 
-
     def tick(self) -> None:
         time = self._session.get_time()
 
@@ -469,7 +468,7 @@ class Player:
             self.pay_daily_leisure()
             self.receive_dividends()
 
-        if time.hour in (0, 6, 12, 18):
+        if time.hour in (6, 12, 18):
             self._lifestyle.update_health(
                 food_type=self._food_type,
                 leisure_spent=self.get_monthly_leisure_expense(),
@@ -482,7 +481,7 @@ class Player:
                 events=[]
             )
             self._lifestyle.update_energy(
-                work_hours_per_week=40,
+                work_hours_per_week=32,
                 month=time.month
             )
             self._lifestyle.update_social_life(
@@ -507,24 +506,20 @@ class Player:
                 leisure_spent=self.get_monthly_leisure_expense() / 30
             )
             self._lifestyle.update_skills_education(
-                education_hours_per_week=5
+                education_hours_per_week=2
             )
-
 
     def get_position_size(self, symbol: str) -> int:
         return self._stocks.get(symbol, 0)
-    
 
     def get_position_entry_price(self, symbol: str) -> float:
         return self._entry_prices.get(symbol, 0.0)
-    
 
     def get_position_pnl(self, symbol: str) -> float:
         entry_price = self.get_position_entry_price(symbol)
         current_price = self._session.get_stock_price(symbol)
         size = self.get_position_size(symbol)
         return (current_price - entry_price) * size
-
 
     def buy_stock(self, symbol: str, quantity: int) -> None:
         last_price = self._session.get_stock_price(symbol)
@@ -542,7 +537,6 @@ class Player:
         self.debit(expense)
         self._stocks[symbol] += quantity
         self._entry_prices[symbol] = entry_price_after
-
 
     def sell_stock(self, symbol: str, quantity: int) -> None:
         size_before = self._stocks.get(symbol, 0)
@@ -568,7 +562,6 @@ class Player:
         self._stocks[symbol] -= quantity
         self._entry_prices[symbol] = entry_price_after
 
-
     def liquidate_stock(self, symbol: str) -> None:
         size = self._stocks.get(symbol, 0)
         price = self._session.get_stock_price(symbol)
@@ -576,7 +569,6 @@ class Player:
         self.credit(revenue)
         self._stocks[symbol] = 0
         self._entry_prices[symbol] = 0.0
-
 
     def get_monthly_dividends(self) -> float:
         dividends_data = self._session.get_dividends()
@@ -593,7 +585,6 @@ class Player:
 
         return total_dividends
 
-
     def get_dividends(self) -> float:
         dividends_data = self._session.get_dividends()
         current_date = self._session.get_time().date()
@@ -605,7 +596,6 @@ class Player:
             total_dividends += dividend_per_share * size
 
         return total_dividends
-
 
     def receive_dividends(self) -> None:
         dividends = self.get_dividends()
