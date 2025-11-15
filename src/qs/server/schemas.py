@@ -23,6 +23,11 @@ class EventResponse(Struct):
     description: str
 
 
+class PlayerStats(Struct):
+    username: str
+    balance: float
+
+
 class PollResponse(Struct):
     session_id: str
     session_status: SessionStatus
@@ -53,6 +58,8 @@ class PollResponse(Struct):
     monthly_loan_expense: float
     monthly_tax_expense: float
     events: list[EventResponse]
+
+    players: list[PlayerStats]
 
 
 class ExplanationResponse(Struct):

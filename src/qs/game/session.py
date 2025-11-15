@@ -28,6 +28,9 @@ class Session:
     def get_id(self) -> str:
         return self._id
 
+    def get_players(self) -> list[Player]:
+        return list(self._players.values())
+
     def get_player(self, username: str) -> Player:
         player = self._players.get(username)
 

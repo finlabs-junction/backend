@@ -172,6 +172,13 @@ class GameController(Controller):
     ) -> PollResponse:
         session = player.get_session()
 
+        players = [
+            PlayerStats(
+                username=player.get_username(),
+                balance=player.get_balance(),
+            ) for player in session.get_players()
+        ]
+
         return PollResponse(
             session_id=session.get_id(),
             session_status=session.get_status(),
@@ -200,7 +207,8 @@ class GameController(Controller):
             monthly_leisure_expense=player.get_monthly_leisure_expense(),
             monthly_loan_expense=player.get_monthly_loan_expense(),
             monthly_tax_expense=player.get_monthly_tax_expense(),
-            events=player.get_events()
+            events=player.get_events(),
+            players=players,
         )
 
     @post(
