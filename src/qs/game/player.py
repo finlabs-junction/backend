@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import typing as t
-from enum import StrEnum
+from enum import StrEnum, Enum
 
 if t.TYPE_CHECKING:
     from qs.game.session import Session
@@ -11,14 +11,14 @@ class Occupation(StrEnum):
     SOFTWARE_ENGINEER = "software_engineer"
 
 
-class BaseDecays(StrEnum):
+class BaseDecays(Enum):
     HEALTH = -2
     HAPPINESS = -5
     SOCIAL_LIFE = -10
     CAREER = +1
 
 
-class FOOD_TYPE(StrEnum):
+class FOOD_TYPE(Enum):
     FAST_FOOD = {
         "health": -5,
         "cost": 100
@@ -33,7 +33,7 @@ class FOOD_TYPE(StrEnum):
     }
 
 
-class HOUSING_QUALITY(StrEnum):
+class HOUSING_QUALITY(Enum):
     LOW = {
         "happiness": -3,
         "comfort": -1,
@@ -51,7 +51,7 @@ class HOUSING_QUALITY(StrEnum):
     }
 
 
-class LOCATION_TYPE(StrEnum):
+class LOCATION_TYPE(Enum):
     SUBURBS = {
         "comfort": -5,
         "cost": 1000
