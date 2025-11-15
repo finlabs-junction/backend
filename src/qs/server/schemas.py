@@ -80,6 +80,7 @@ class TextExplanationRequest(Struct):
 
 class ExplanationResponse(Struct):
     explanation: str
+    hint: str | None = None
 
 
 class SetFoodBudgetRequest(Struct):

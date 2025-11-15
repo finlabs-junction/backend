@@ -10,6 +10,7 @@ from qs.contrib.litestar import *
 from qs.events_data import get_event_by_id
 from qs.prompting import (
     EVENT_EXPLANATION_SYSTEM_PROMPT,
+    EVENT_HINT_SYSTEM_PROMPT,
     TEXT_EXPLANATION_SYSTEM_PROMPT,
     build_event_prompt,
     build_text_explanation_prompt,
@@ -465,9 +466,10 @@ async def explain_event(
         raise NotFoundError("Event not found")
 
     prompt = build_event_prompt(event)
-    text = call_llm(EVENT_EXPLANATION_SYSTEM_PROMPT, prompt)
+    explanation = call_llm(EVENT_EXPLANATION_SYSTEM_PROMPT, prompt)
+    hint = call_llm(EVENT_HINT_SYSTEM_PROMPT, prompt)
 
-    return ExplanationResponse(explanation=text)
+    return ExplanationResponse(explanation=explanation, hint=hint)
 
 
 @post(
