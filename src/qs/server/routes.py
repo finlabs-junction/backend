@@ -224,6 +224,8 @@ class GameController(Controller):
             time=session.get_time(),
             time_progression_multiplier=session.get_time_progression_multiplier(),
             balance=player.get_balance(),
+            assets=player.get_assets(),
+            equity=player.get_equity(),
             monthly_income=player.get_monthly_income(),
             monthly_expenses=player.get_monthly_expenses(),
             monthly_net_income=player.get_monthly_net_income(),

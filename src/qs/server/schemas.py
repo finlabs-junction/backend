@@ -37,6 +37,8 @@ class PollResponse(Struct):
     time_progression_multiplier: int
 
     balance: float
+    assets: float
+    equity: float
     monthly_income: float
     monthly_expenses: float
     monthly_net_income: float

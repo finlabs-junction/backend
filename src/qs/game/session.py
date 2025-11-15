@@ -37,7 +37,7 @@ class Session:
 
     @classmethod
     async def create_scenario_2008(cls, session_id: str) -> Session:
-        start_time = datetime(2005, 1, 1, 12, 0, 0)
+        start_time = datetime(2008, 1, 1, 12, 0, 0)
         end_time = datetime(2010, 12, 31, 12, 0, 0)
 
         stock_prices, dividends = await get_stock_prices(
@@ -115,8 +115,6 @@ class Session:
 
 
     def start(self) -> None:
-        self._time_progression_multiplier = 1
-
         if self._task is not None:
             return
 
