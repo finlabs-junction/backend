@@ -6,6 +6,7 @@ from datetime import timedelta
 
 from qs.events_data import EVENTS_DF
 from qs.exceptions import UnderflowError
+from qs.game.priceMultiplier import PriceMultiplier
 
 if t.TYPE_CHECKING:
     from qs.game.session import Session
@@ -288,6 +289,8 @@ class Player:
             skills_education=0,
         )
         self._events = []
+        self._priceMultiplier = PriceMultiplier()
+        self._multiplier = 1
 
     def get_session(self) -> Session:
         return self._session
@@ -370,11 +373,11 @@ class Player:
         return round(self._lifestyle.skills_education)
 
     def get_monthly_rent_expense(self) -> float:
-        return self._housing_quality.value["cost"] + self._location_type.value["cost"]
+        return (self._housing_quality.value["cost"] + self._location_type.value["cost"]) * self._multiplier
 
     def get_monthly_utilities_expense(self) -> float:
         # Base utilities of 100, plus 2 per sqm
-        return 100 + (self._private_living_space_sqm * 2)
+        return (100 + (self._private_living_space_sqm * 2)) * self._multiplier
 
     def get_monthly_grocery_expense(self) -> float:
         return self._food_type.value["cost"]
@@ -383,7 +386,7 @@ class Player:
         self._monthly_grocery_expense = amount
 
     def get_monthly_transportation_expense(self) -> float:
-        return 150
+        return 150 * self._multiplier
 
     def get_monthly_leisure_expense(self) -> float:
         return self._monthly_leisure_expense
@@ -396,9 +399,9 @@ class Player:
         self._monthly_grocery_expense = amount
 
         # Adjust food type based on budget
-        if amount >= 250:
+        if amount / self._multiplier >= 250:
             self._food_type = FOOD_TYPE.ORGANIC
-        elif amount >= 150:
+        elif amount / self._multiplier >= 150:
             self._food_type = FOOD_TYPE.HOME_COOKED
         else:
             self._food_type = FOOD_TYPE.FAST_FOOD
@@ -505,6 +508,12 @@ class Player:
 
         self.get_events_for_date()
 
+        self._multiplier = self._priceMultiplier.multiplier_for_month(
+            time.year, time.month)
+
+        print(
+            f"Price multiplier for {time.year}-{time.month:02d}: {self._multiplier:.3f}")
+
         if time.hour == 0:
             if self.get_balance() < 0:
                 # on a negative balance, incur daily interest 40% APR
@@ -528,11 +537,11 @@ class Player:
         if time.hour in (0, 6, 12, 18):
             self._lifestyle.update_health(
                 food_type=self._food_type,
-                leisure_spent=self.get_monthly_leisure_expense(),
+                leisure_spent=self.get_monthly_leisure_expense() / self._multiplier,
                 current_month=time.month
             )
             self._lifestyle.update_happiness(
-                leisure_spent=self.get_monthly_leisure_expense() / 30,
+                leisure_spent=self.get_monthly_leisure_expense() / self._multiplier / 30,
                 housing_quality=self._housing_quality,
                 housing_has_sauna=False,
                 events=[]
@@ -542,7 +551,7 @@ class Player:
                 month=time.month
             )
             self._lifestyle.update_social_life(
-                leisure_spent=self.get_monthly_leisure_expense() / 30,
+                leisure_spent=self.get_monthly_leisure_expense() / self._multiplier / 30,
                 work_hours_per_week=40
             )
             self._lifestyle.update_stress_level(
@@ -560,7 +569,7 @@ class Player:
             )
             self._lifestyle.update_career_progress(
                 is_employed=True,
-                leisure_spent=self.get_monthly_leisure_expense() / 30
+                leisure_spent=self.get_monthly_leisure_expense() / self._multiplier / 30
             )
             self._lifestyle.update_skills_education(
                 education_hours_per_week=2
