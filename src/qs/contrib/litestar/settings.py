@@ -39,10 +39,15 @@ class APISettings(Struct):
     """
 
     allow_origins: list[str] = msgspec.field(
-        default_factory=lambda: list(os.environ.get(
-            "QS_ALLOW_ORIGINS",
-            ["http://localhost:8000"],
-        )),
+        default_factory=lambda: (
+            [
+                origin.strip() 
+                for origin in os.environ.get("QS_ALLOW_ORIGINS", "").split(",") 
+                if origin.strip()
+            ]
+            if os.environ.get("QS_ALLOW_ORIGINS")
+            else ["http://localhost:8000"]
+        ),
     )
     """
     List of allowed origins for CORS.

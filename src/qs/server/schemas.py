@@ -10,10 +10,15 @@ class SessionCreateRequest(Struct):
 
 class SessionCreateResponse(Struct):
     session_id: str
+    token: str
 
 
 class SessionJoinRequest(Struct):
     username: str
+
+
+class SessionJoinResponse(Struct):
+    token: str
 
 
 class EventResponse(Struct):
@@ -21,6 +26,11 @@ class EventResponse(Struct):
     date: str
     title: str
     description: str
+
+
+class PlayerStats(Struct):
+    username: str
+    balance: float
 
 
 class PollResponse(Struct):
@@ -32,11 +42,14 @@ class PollResponse(Struct):
     time_progression_multiplier: int
 
     balance: float
+    assets: float
+    equity: float
     monthly_income: float
     monthly_expenses: float
     monthly_net_income: float
     occupation: str
     monthly_salary: float
+    monthly_dividends: float
     health_level: int
     happiness_level: int
     energy_level: int
@@ -52,8 +65,53 @@ class PollResponse(Struct):
     monthly_leisure_expense: float
     monthly_loan_expense: float
     monthly_tax_expense: float
+    stocks: list[Position]
     events: list[EventResponse]
+    players: list[PlayerStats]
+
+
+class Position(Struct):
+    symbol: str
+    size: int
+    last_price: float
+    entry_price: float
+    pnl: float
+
+
+class TextExplanationRequest(Struct):
+    text: str
+    context: str
+
+
+class ChatMessage(Struct):
+    role: str  # 'system', 'user', 'assistant'
+    content: str
 
 
 class ExplanationResponse(Struct):
     explanation: str
+    hint: str | None = None
+
+
+class SetFoodBudgetRequest(Struct):
+    monthly_food_budget: float
+
+
+class AccommodationOption(Struct):
+    id: str
+    name: str
+    quality: str  # 'LOW', 'MEDIUM', 'HIGH'
+    location: str  # 'SUBURBS', 'CITY_CENTER', 'RURAL'
+    sqm: float
+    monthly_rent: float
+    monthly_utilities: float
+    description: str
+
+
+class ListAccommodationsResponse(Struct):
+    current_accommodation_id: str
+    accommodations: list[AccommodationOption]
+
+
+class MoveAccommodationRequest(Struct):
+    accommodation_id: str

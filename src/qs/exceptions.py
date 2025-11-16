@@ -123,7 +123,7 @@ class NotImplementedError(Error, status_code=HTTP_500_INTERNAL_SERVER_ERROR):
 
 
 class UnauthorizedError(Error, status_code=HTTP_401_UNAUTHORIZED):
-    """Client is not authorized to perform this operation.."""
+    """Client is not authorized to perform this operation."""
 
 
 class ForbiddenError(Error, status_code=HTTP_403_FORBIDDEN):
@@ -151,3 +151,12 @@ class PlayerAlreadyExistsError(Error, status_code=HTTP_409_CONFLICT):
 
     session_id: str
     username: str
+
+
+@dataclass
+class UnderflowError(Error, status_code=HTTP_400_BAD_REQUEST):
+    """An attempt was made to reduce a position below zero."""
+
+    symbol: str
+    attempted_reduction: int
+    current_size: int

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import asyncio
-from datetime import datetime, timedelta
+from datetime import datetime, date, timedelta
 from enum import StrEnum
 
 from qs.game.player import Player
@@ -9,6 +9,7 @@ from qs.exceptions import (
     PlayerNotFoundError,
     PlayerAlreadyExistsError,
 )
+from qs.game.stocks import get_stock_prices
 
 
 class SessionStatus(StrEnum):
@@ -18,15 +19,47 @@ class SessionStatus(StrEnum):
 
 
 class Session:
-    def __init__(self, session_id: str):
+    def __init__(
+        self, 
+        session_id: str,
+        period: tuple[datetime, datetime],
+        stock_prices: dict[str, dict[date, float]],
+        dividends: dict[str, dict[date, float]],
+    ):
         self._id = session_id
         self._players: dict[str, Player] = {}
-        self._time = datetime(2007, 12, 2, 12, 0, 0)
+        self._time, self._end_time = period
+        self._stock_prices = stock_prices
+        self._dividends = dividends
         self._time_progression_multiplier = 1
         self._task: asyncio.Task | None = None
 
+
+    @classmethod
+    async def create_scenario_2008(cls, session_id: str) -> Session:
+        start_time = datetime(2008, 1, 1, 12, 0, 0)
+        end_time = datetime(2010, 12, 31, 12, 0, 0)
+
+        stock_prices, dividends = await get_stock_prices(
+            symbols=("AAPL", "GOOGL", "MSFT", "AMZN"),
+            period=(start_time, end_time),
+        )
+
+        return cls(
+            session_id=session_id,
+            period=(start_time, end_time),
+            stock_prices=stock_prices,
+            dividends=dividends,
+        )
+
+
     def get_id(self) -> str:
         return self._id
+    
+
+    def get_players(self) -> list[Player]:
+        return list(self._players.values())
+    
 
     def get_player(self, username: str) -> Player:
         player = self._players.get(username)
@@ -38,6 +71,7 @@ class Session:
             )
 
         return player
+    
 
     def add_player(
         self,
@@ -59,15 +93,19 @@ class Session:
         self._players[username] = player
 
         return player
+    
 
     def get_time(self) -> datetime:
         return self._time
+    
 
     def get_time_progression_multiplier(self) -> int:
         return self._time_progression_multiplier
+    
 
     def set_time_progression_multiplier(self, multiplier: int) -> None:
         self._time_progression_multiplier = multiplier
+
 
     def tick(self) -> None:
         self._time += timedelta(hours=1)
@@ -75,17 +113,13 @@ class Session:
         for player in self._players.values():
             player.tick()
 
-    def start(self, resume: bool = False) -> None:
+
+    def start(self) -> None:
         if self._task is not None:
             return
 
         async def run():
-            if not resume:
-                #  Gathering initial 30 days of ticks
-                for _ in range(30 * 24):
-                    self.tick()
-
-            while True:
+            while self._time < self._end_time:
                 for _ in range(self._time_progression_multiplier):
                     self.tick()
 
@@ -94,10 +128,17 @@ class Session:
         loop = asyncio.get_running_loop()
         self._task = loop.create_task(run())
 
+
+    def pause(self) -> None:
+        self._time_progression_multiplier = 0
+
+    
     def stop(self) -> None:
-        if self._task is not None:
-            self._task.cancel()
-            self._task = None
+        if self._task is None:
+            return
+
+        self._task.cancel()
+
 
     def get_status(self) -> SessionStatus:
         if self._task is None:
@@ -107,3 +148,32 @@ class Session:
             return SessionStatus.ENDED
 
         return SessionStatus.RUNNING
+
+
+    def get_stock_price(self, symbol: str) -> float:
+        prices = self._stock_prices[symbol]
+        current_date = self._time.date()
+        first_date = min(prices.keys())
+
+        while current_date >= first_date:
+            if current_date in prices:
+                return prices[current_date]
+            
+            current_date -= timedelta(days=1)
+
+        return prices[first_date]
+    
+
+    def get_stock_prices(self) -> dict[str, dict[date, float]]:
+        return self._stock_prices
+
+
+    def get_dividend(self, symbol: str) -> float:
+        try:
+            return self._dividends[symbol][self._time.date()]
+        except:
+            return 0.0
+
+
+    def get_dividends(self) -> dict[str, dict[date, float]]:
+        return self._dividends
