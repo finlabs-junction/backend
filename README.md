@@ -1,8 +1,8 @@
-# FinLabs - Financial Simulation Learning Tool - Backend
+# FinLabs - Backend
 
 A multiplayer financial simulation game designed to teach teenagers financial literacy through real-world economic scenarios. Players manage their finances, investments, and lifestyle choices while navigating historical economic events from 2008-2010.
 
-## 🎮 Overview
+## 📋 Overview
 
 This backend API powers our financial literacy game. You can read more about the game in the [frontend repository](https://github.com/finlabs-junction/frontend).
 
@@ -11,7 +11,7 @@ This backend API powers our financial literacy game. You can read more about the
 Built with:
 
 -   **Framework**: [Litestar](https://litestar.dev/) (modern async Python web framework)
--   **AI/ML**: OpenAI GPT for financial tutoring and explanations
+-   **AI/ML**: OpenAI GPT-5.1 for financial tutoring and explanations
 -   **Data**: Pandas + yfinance for stock market data
 -   **Authentication**: JWT-based auth via Authlib
 -   **Server**: Uvicorn ASGI server
@@ -50,7 +50,7 @@ src/qs/
 
 ### Prerequisites
 
--   Python 3.11+
+-   Python 3.12
 -   Poetry (dependency manager)
 
 ### Installation
@@ -72,7 +72,6 @@ src/qs/
     ```bash
     QS_DEBUG=1                    # Enable debug mode
     OPENAI_API_KEY=your_key       # OpenAI API key
-    JWT_SECRET_KEY=your_secret    # JWT signing secret
     ```
 
 ### Running the Server
